@@ -1,8 +1,6 @@
 package com.chazwinter.model;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /* Class needed for Day02 */
@@ -33,7 +31,7 @@ public class ColorGame {
 
             /* If a color appears in this draw, update its block count.
                 Otherwise, it will stay zero. Either way, add the count to the List. */
-            int blocks = Integer.parseInt(numAndColor[1].trim());
+            int blocks = Integer.parseInt(numAndColor[1]);
             switch(numAndColor[2]) {
                 case "red" :
                     red = blocks;

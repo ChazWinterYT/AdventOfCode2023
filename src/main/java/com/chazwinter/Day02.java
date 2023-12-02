@@ -5,7 +5,6 @@ import com.chazwinter.model.ColorGame;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Day02 {
     public int validGameTotal(String filePath, int part) throws IOException {
