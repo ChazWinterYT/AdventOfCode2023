@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/* NOTE: This class uses the model.ColorGame class. */
 public class Day02 {
     public int validGameTotal(String filePath, int part) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(filePath));

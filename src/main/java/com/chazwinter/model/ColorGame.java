@@ -22,6 +22,11 @@ public class ColorGame {
         this.blues = new ArrayList<>();
     }
 
+    /**
+     * For a given set of game data, extracts the number of
+     * red, green, and blue blocks taken in each draw.
+     * @param data The game data.
+     */
     public void extractGameData(String[] data) {
         int red = 0, green = 0, blue = 0;
         // Example input array: [(3 blue), (1 green)]. Colors may be missing.
@@ -49,6 +54,11 @@ public class ColorGame {
         this.blues.add(blue);
     }
 
+    /**
+     * Determine if the number of blocks drawn in a game is possible,
+     * given the maximum number of each color that was available.
+     * @return true if the game was possible.
+     */
     public boolean validateGameIndividual() {
         for (int red : reds) {
             if (red > MAX_RED) return false;
@@ -62,6 +72,11 @@ public class ColorGame {
         return true;
     }
 
+    /**
+     * Given a game, determine the "power" of that game according to
+     * AoC rules.
+     * @return the "power"
+     */
     public int calculatePower() {
         int maxRed = 0, maxGreen = 0, maxBlue = 0;
         for (int red : reds) {

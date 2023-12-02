@@ -30,7 +30,12 @@ public class Day01 {
         return sum;
     }
 
-    // part one
+    /**
+     * For Part 1. Find the earliest and latest digit in each string, and
+     * merge them into a two-digit number.
+     * @param line the String to evaluate
+     * @return the merged two-digit integer
+     */
     private int processDigitsFromInput(String line) {
         int left = 0, right = line.length() - 1;
         int leftDigit = 0, rightDigit = 0;
@@ -62,7 +67,7 @@ public class Day01 {
         int left = 0, right = line.length() - 1;
         int leftDigit = 0, rightDigit = 0;
         while (left <= line.length()) {
-            String leftString = line.substring(0, left);
+            String leftString = line.substring(0, left);    // Strings will be a, ab, abc, etc...
             int foundDigit = matchTextOrDigit(leftString, pattern);
             if (foundDigit != -1) {
                 leftDigit = 10 * foundDigit;
@@ -71,7 +76,7 @@ public class Day01 {
             left++;
         }
         while (right >= 0) {
-            String rightString = line.substring(right, line.length());
+            String rightString = line.substring(right, line.length());  // Strings z, yz, xyz, etc...
             int foundDigit = matchTextOrDigit(rightString, pattern);
             if (foundDigit != -1) {
                 rightDigit = foundDigit;
@@ -83,6 +88,13 @@ public class Day01 {
         return leftDigit + rightDigit;
     }
 
+    /**
+     * Helper method to check is a given string contains either a digit,
+     * or the spelled out word version of a digit.
+     * @param input The string to evaluate.
+     * @param pattern The RegEx pattern for finding a digit.
+     * @return the integer form of whatever we found, or -1 if no digits found.
+     */
     private int matchTextOrDigit(String input, Pattern pattern) {
         // Look for a digit
         Matcher matcher = pattern.matcher(input);
