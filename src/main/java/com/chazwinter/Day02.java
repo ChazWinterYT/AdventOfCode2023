@@ -22,7 +22,6 @@ public class Day02 {
             String[] splitBySemicolon = splitByColon[1].split(";");
             // Your array is now [(3 blue, 1 green), (2 red, 1 blue, 1 green), etc].
             for (String draw : splitBySemicolon) {
-                int red = 0, green = 0, blue = 0;
                 String[] splitByComma = draw.split(",");
                 // Your array is now [(3 blue), (1 green)].
                 game.extractGameData(splitByComma);
