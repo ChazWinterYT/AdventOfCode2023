@@ -148,25 +148,26 @@ public class Day03 {
 
     /**
      * For Part 2. When a gear is found, we need a COPY of the three grid rows
-     * surrounding that gear.
+     * surrounding that gear. If the gear is in the top or bottom row,
+     * TOO BAD! Three rows are REQUIRED. So just make up an extra row full of dots!
      * @param i The row where the gear was found in the overall grid.
      * @param j The column where the gear was found in that row.
      * @return The 3 x [PUZZLE_SIZE] array surrounding the found gear.
      */
     private char[][] getRowsAroundGear(int i, int j) {
         char[][] rowsAroundGear = new char[3][PUZZLE_SIZE];
-        // Row above
+        // Row above the gear, if it exists.
         if (isInBounds(i - 1, 0)) {
             rowsAroundGear[0] = copyArray(engineGrid[i - 1]);
-        } else {
+        } else {    // The row didn't exist. Just make up a new top row.
             Arrays.fill(rowsAroundGear[0], '.');
         }
-        // Row that the gear is in
+        // Row that the gear is in. This better exist lol.
         rowsAroundGear[1] = copyArray(engineGrid[i]);
-        // Row below
+        // Row below the gear, if it exists.
         if (isInBounds(i + 1, 0)) {
             rowsAroundGear[2] = copyArray(engineGrid[i + 1]);
-        } else {
+        } else {    // The row didn't exist. Just make up a new bottom row.
             Arrays.fill(rowsAroundGear[2], '.');
         }
         removeAllOtherGears(rowsAroundGear, j);
