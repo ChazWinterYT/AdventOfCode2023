@@ -48,7 +48,7 @@ public class Day03 {
             int sumOfGearProducts = 0;
             /* If we see a gear, check if it has two numbers around it.
             * We can't destroy the numbers this time, so copy the surrounding rows
-            * into new Lists, so we can destroy THOSE instead. */
+            * into a new 2D array, so we can destroy THOSE numbers instead. */
             for (int i = 0; i < engineGrid.length; i++) {
                 for (int j = 0; j < engineGrid[0].length; j++) {
                     if (engineGrid[i][j] == '*') {
