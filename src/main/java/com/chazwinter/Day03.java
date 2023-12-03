@@ -13,11 +13,11 @@ public class Day03 {
     /* Two arrays to represent where a neighbor cell is relative to the current one.
         For example, the top-left cell is row-1 and col-1. */
     int[] dRow = new int[] {-1, -1, -1,
-            0,      0,
-            1,  1,  1};
+                             0,      0,
+                             1,  1,  1};
     int[] dCol = new int[] {-1,  0,  1,
-            -1,      1,
-            -1,  0,  1};
+                            -1,      1,
+                            -1,  0,  1};
 
     public int machineParts(String filePath, int part) throws IOException {
         // Store puzzle input as a 2D char array (DID YOU SET THE PUZZLE SIZE?).
