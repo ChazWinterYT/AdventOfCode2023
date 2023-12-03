@@ -107,9 +107,8 @@ public class Day03 {
     }
 
     /**
-     * When a digit is found in the grid, get the full number associated
-     * with that digit. This only works for Part 1; This method is overloaded
-     * later on for Part 2.
+     * When a digit is found in the grid, get the full number associated with that digit.
+     * This only works for Part 1; This method is overloaded later on for Part 2.
      * @param rowChars The array where the digit was found.
      * @param row The row of that array in the overall grid.
      * @param col The column where the digit was found.
@@ -147,9 +146,9 @@ public class Day03 {
     }
 
     /**
-     * For Part 2. When a gear is found, we need a COPY of the three grid rows
-     * surrounding that gear. If the gear is in the top or bottom row,
-     * TOO BAD! Three rows are REQUIRED. So just make up an extra row full of dots!
+     * For Part 2. When a gear is found, we need a COPY of the three grid rows surrounding that gear.
+     * If the gear is in the top or bottom row, TOO BAD! Three rows are REQUIRED.
+     * So just make up an extra row full of dots!
      * @param i The row where the gear was found in the overall grid.
      * @param j The column where the gear was found in that row.
      * @return The 3 x [PUZZLE_SIZE] array surrounding the found gear.
@@ -182,9 +181,8 @@ public class Day03 {
     }
 
     /**
-     * When producing a copy of the array, we only want it to include
-     * the CURRENT gear, not any other gears that might coincidentally
-     * exist within these three rows.
+     * When producing a copy of the array, we only want it to include the CURRENT gear,
+     * not any other gears that might coincidentally exist within these three rows.
      * @param rowsAroundGear The copied 2D array containing our gear.
      * @param ourGear The gear we want to keep.
      */
@@ -204,7 +202,7 @@ public class Day03 {
      * add them to a List to evaluate later.
      * @param rowsAroundGear The copy of the grid rows surrounding the gear.
      * @param row The row where the gear is located.
-     *            Due to the copied grid's design, the gear is always in row 1.
+     *            Due to the copied grid's design, the gear is always in row 1. row = 1 is always passed in.
      * @param col The column where the gear is located.
      * @return A List of all numbers that surround the gear.
      */
@@ -224,9 +222,8 @@ public class Day03 {
     }
 
     /**
-     * The other getValueFromGrid() method only specifically works for part 1,
-     * and I don't want to refactor it, so this is an overloaded version
-     * that specifically works for part 2.
+     * The other getValueFromGrid() method only specifically works for part 1, and I don't want to
+     * refactor it, so here is an overloaded version that specifically works for part 2.
      */
     private int getValueFromGrid(char[][] rowsAroundGear, char[] rowChars, int row, int col) {
         int result = 0;
