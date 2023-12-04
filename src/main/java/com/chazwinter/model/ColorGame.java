@@ -3,7 +3,7 @@ package com.chazwinter.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/* Class needed for Day02 */
+/* NOTE: This class is needed for Day02. */
 public class ColorGame {
     public static final int MAX_RED = 12;
     public static final int MAX_GREEN = 13;
@@ -13,7 +13,6 @@ public class ColorGame {
     private List<Integer> reds;
     private List<Integer> greens;
     private List<Integer> blues;
-    private boolean possible;
 
     public ColorGame (int gameNumber) {
         this.gameNumber = gameNumber;
@@ -73,8 +72,7 @@ public class ColorGame {
     }
 
     /**
-     * Given a game, determine the "power" of that game according to
-     * AoC rules.
+     * Given a game, determine the "power" of that game according to AoC rules.
      * @return the "power"
      */
     public int calculatePower() {
@@ -97,38 +95,6 @@ public class ColorGame {
 
     public void setGameNumber(int gameNumber) {
         this.gameNumber = gameNumber;
-    }
-
-    public List<Integer> getReds() {
-        return reds;
-    }
-
-    public void setReds(List<Integer> reds) {
-        this.reds = reds;
-    }
-
-    public List<Integer> getGreens() {
-        return greens;
-    }
-
-    public void setGreens(List<Integer> greens) {
-        this.greens = greens;
-    }
-
-    public List<Integer> getBlues() {
-        return blues;
-    }
-
-    public void setBlues(List<Integer> blues) {
-        this.blues = blues;
-    }
-
-    public boolean isPossible() {
-        return possible;
-    }
-
-    public void setPossible(boolean possible) {
-        this.possible = possible;
     }
 
     @Override
