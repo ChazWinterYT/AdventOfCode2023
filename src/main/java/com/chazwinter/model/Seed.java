@@ -10,6 +10,7 @@ public class Seed {
     private long temperature;
     private long humidity;
     private long location;
+    private long numSeedsInSequence;
 
     public Seed(long seedNumber) {
         this.seedNumber = seedNumber;
@@ -18,10 +19,7 @@ public class Seed {
     public long getSeedNumber() {
         return seedNumber;
     }
-
-    public void setSeedNumber(Long seedNumber) {
-        this.seedNumber = seedNumber;
-    }
+    // No setter required for seedNumber
 
     public long getSoil() {
         return soil;
@@ -79,9 +77,17 @@ public class Seed {
         this.location = location;
     }
 
+    public long getNumSeedsInSequence() {
+        return numSeedsInSequence;
+    }
+
+    public void setNumSeedsInSequence(long numSeedsInSequence) {
+        this.numSeedsInSequence = numSeedsInSequence;
+    }
+
     @Override
     public String toString() {
-        return String.format("Seed #%d: Soil %d, Fer %d, Wtr %d, Lgt %d, Tmp %d, Hum %d, Loc %d.",
-                seedNumber, soil, fertilizer, water, light, temperature, humidity, location);
+        return String.format("Seed #%d: Soil %d, Fer %d, Wtr %d, Lgt %d, Tmp %d, Hum %d, Loc %d. %d Seeds in seq.",
+                seedNumber, soil, fertilizer, water, light, temperature, humidity, location, numSeedsInSequence);
     }
 }

@@ -16,8 +16,10 @@ import java.util.Map;
 /* NOTE: This class uses the util.RangeMapper class. */
 /* NOTE: This class uses the util.MapType enum. */
 public class Day05 {
+    Map<MapType, List<RangeMapper>> allTypeMappings;
+
     public long seedFertilizer(String filePath, int part) throws IOException {
-        Map<MapType, List<RangeMapper>> allTypeMappings = new HashMap<>();
+        allTypeMappings = new HashMap<>();
         List<Seed> seeds = new ArrayList<>();
 
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
@@ -40,45 +42,39 @@ public class Day05 {
             } else if (line.contains("seeds:")) {
                 String[] splitByColon = line.split(":");
                 String[] splitNumbers = splitByColon[1].split(" ");
-                // The first split produces an empty String, so skip it. The others are Seeds.
-                for (int i = 1; i < splitNumbers.length; i++) {
-                    seeds.add(new Seed(Long.parseLong(splitNumbers[i])));
+                if (part == 1) {
+                    // The first split produces an empty String, so skip it. The others are Seeds.
+                    for (int i = 1; i < splitNumbers.length; i++) {
+                        seeds.add(new Seed(Long.parseLong(splitNumbers[i])));
+                    }
+                } else if (part == 2) {
+                    // Now they are pairs denoting a starting seed number, and a range of consecutive seeds.
+                    for (int i = 1; i < splitNumbers.length; i++) {
+                        Seed seed = new Seed(Long.parseLong(splitNumbers[i]));
+                        seed.setNumSeedsInSequence(Long.parseLong(splitNumbers[++i]));
+                        seeds.add(seed);
+                    }
                 }
             }
         }
         long minLocation = Long.MAX_VALUE;
-        for (Seed seed : seeds) {
-            // Convert a seed input to its Location via a series of mappings
-            currentMapType = MapType.SEED_TO_SOIL;
-            seed.setSoil(RangeMapper.getMapping(
-                    seed.getSeedNumber(), allTypeMappings.get(currentMapType)));
-            currentMapType = MapType.SOIL_TO_FERTILIZER;
-            seed.setFertilizer(RangeMapper.getMapping(
-                    seed.getSoil(), allTypeMappings.get(currentMapType)));
-            currentMapType = MapType.FERTILIZER_TO_WATER;
-            seed.setWater(RangeMapper.getMapping(
-                    seed.getFertilizer(), allTypeMappings.get(currentMapType)));
-            currentMapType = MapType.WATER_TO_LIGHT;
-            seed.setLight(RangeMapper.getMapping(
-                    seed.getWater(), allTypeMappings.get(currentMapType)));
-            currentMapType = MapType.LIGHT_TO_TEMPERATURE;
-            seed.setTemperature(RangeMapper.getMapping(
-                    seed.getLight(), allTypeMappings.get(currentMapType)));
-            currentMapType = MapType.TEMPERATURE_TO_HUMIDITY;
-            seed.setHumidity(RangeMapper.getMapping(
-                    seed.getTemperature(), allTypeMappings.get(currentMapType)));
-            currentMapType = MapType.HUMIDITY_TO_LOCATION;
-            seed.setLocation(RangeMapper.getMapping(
-                    seed.getHumidity(), allTypeMappings.get(currentMapType)));
-            minLocation = Math.min(minLocation, seed.getLocation());
-            // Debug, uncomment to see this seed's attributes.
-            // System.out.println(seed);
+        for (int i = 0; i < seeds.size(); i++) {
+            long seedLocation = Long.MAX_VALUE;
+            if (part == 1) {
+                Seed seed = seeds.get(i);
+                seedLocation = processSeed(seed);
+                minLocation = Math.min(minLocation, seedLocation);
+            } else if (part == 2) {
+                long startingSeed = seeds.get(i).getSeedNumber();
+                long numSeeds = seeds.get(i).getNumSeedsInSequence();
+                for (int j = 0; j < numSeeds; j++) {
+                    Seed currentSeed = new Seed(startingSeed + j);
+                    seedLocation = processSeedConcurrently(currentSeed);
+                    minLocation = Math.min(minLocation, seedLocation);
+                }
+            }
         }
-        if (part == 1) {
-            return minLocation;
-        } else {    // Part 2
-            return -1;
-        }
+        return minLocation;
     }
 
     private MapType getCurrentMapTypeFromLine(String line) {
@@ -87,6 +83,31 @@ public class Day05 {
                 .toUpperCase()
                 .replace("-", "_");
         return MapType.valueOf(mapTypeAsString);
+    }
+
+    private long processSeed(Seed seed) {
+        MapType currentMapType = MapType.SEED_TO_SOIL;
+        seed.setSoil(RangeMapper.getMapping(
+                seed.getSeedNumber(), allTypeMappings.get(currentMapType)));
+        currentMapType = MapType.SOIL_TO_FERTILIZER;
+        seed.setFertilizer(RangeMapper.getMapping(
+                seed.getSoil(), allTypeMappings.get(currentMapType)));
+        currentMapType = MapType.FERTILIZER_TO_WATER;
+        seed.setWater(RangeMapper.getMapping(
+                seed.getFertilizer(), allTypeMappings.get(currentMapType)));
+        currentMapType = MapType.WATER_TO_LIGHT;
+        seed.setLight(RangeMapper.getMapping(
+                seed.getWater(), allTypeMappings.get(currentMapType)));
+        currentMapType = MapType.LIGHT_TO_TEMPERATURE;
+        seed.setTemperature(RangeMapper.getMapping(
+                seed.getLight(), allTypeMappings.get(currentMapType)));
+        currentMapType = MapType.TEMPERATURE_TO_HUMIDITY;
+        seed.setHumidity(RangeMapper.getMapping(
+                seed.getTemperature(), allTypeMappings.get(currentMapType)));
+        currentMapType = MapType.HUMIDITY_TO_LOCATION;
+        seed.setLocation(RangeMapper.getMapping(
+                seed.getHumidity(), allTypeMappings.get(currentMapType)));
+        return seed.getLocation();
     }
 
 
