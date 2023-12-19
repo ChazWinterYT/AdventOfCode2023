@@ -68,8 +68,7 @@ public class Day05 {
                 long startingSeed = seeds.get(i).getSeedNumber();
                 long numSeeds = seeds.get(i).getNumSeedsInSequence();
                 for (int j = 0; j < numSeeds; j++) {
-                    Seed currentSeed = new Seed(startingSeed + j);
-                    seedLocation = processSeedConcurrently(currentSeed);
+                    seedLocation = processSeed(new Seed(startingSeed + j));
                     minLocation = Math.min(minLocation, seedLocation);
                 }
             }
@@ -87,28 +86,19 @@ public class Day05 {
 
     private long processSeed(Seed seed) {
         MapType currentMapType = MapType.SEED_TO_SOIL;
-        seed.setSoil(RangeMapper.getMapping(
-                seed.getSeedNumber(), allTypeMappings.get(currentMapType)));
+        seed.setSoil(RangeMapper.getMapping(seed.getSeedNumber(), allTypeMappings.get(currentMapType)));
         currentMapType = MapType.SOIL_TO_FERTILIZER;
-        seed.setFertilizer(RangeMapper.getMapping(
-                seed.getSoil(), allTypeMappings.get(currentMapType)));
+        seed.setFertilizer(RangeMapper.getMapping(seed.getSoil(), allTypeMappings.get(currentMapType)));
         currentMapType = MapType.FERTILIZER_TO_WATER;
-        seed.setWater(RangeMapper.getMapping(
-                seed.getFertilizer(), allTypeMappings.get(currentMapType)));
+        seed.setWater(RangeMapper.getMapping(seed.getFertilizer(), allTypeMappings.get(currentMapType)));
         currentMapType = MapType.WATER_TO_LIGHT;
-        seed.setLight(RangeMapper.getMapping(
-                seed.getWater(), allTypeMappings.get(currentMapType)));
+        seed.setLight(RangeMapper.getMapping(seed.getWater(), allTypeMappings.get(currentMapType)));
         currentMapType = MapType.LIGHT_TO_TEMPERATURE;
-        seed.setTemperature(RangeMapper.getMapping(
-                seed.getLight(), allTypeMappings.get(currentMapType)));
+        seed.setTemperature(RangeMapper.getMapping(seed.getLight(), allTypeMappings.get(currentMapType)));
         currentMapType = MapType.TEMPERATURE_TO_HUMIDITY;
-        seed.setHumidity(RangeMapper.getMapping(
-                seed.getTemperature(), allTypeMappings.get(currentMapType)));
+        seed.setHumidity(RangeMapper.getMapping(seed.getTemperature(), allTypeMappings.get(currentMapType)));
         currentMapType = MapType.HUMIDITY_TO_LOCATION;
-        seed.setLocation(RangeMapper.getMapping(
-                seed.getHumidity(), allTypeMappings.get(currentMapType)));
+        seed.setLocation(RangeMapper.getMapping(seed.getHumidity(), allTypeMappings.get(currentMapType)));
         return seed.getLocation();
     }
-
-
 }
