@@ -16,14 +16,21 @@ public class RangeMapper {
         this.range = range;
     }
 
+    /**
+     * Given an input value, figure out what output value it maps to.
+     * @param startValue The input value.
+     * @param mappings The List of RangeMapper mappings that could apply to this input value.
+     * @return The mapped output value.
+     */
     public static long getMapping(long startValue, List<RangeMapper> mappings) {
         for (RangeMapper mapper : mappings) {
+            /* If the start value falls within the range of one of the mappers, use it! */
             if (startValue >= mapper.sourceStart && startValue < mapper.sourceStart + mapper.range) {
                 long offset = mapper.sourceStart - mapper.destStart;
                 return startValue - offset;
             }
         }
-        /* If the startValue is not covered by the Mapper, then it maps to itself. */
+        /* If the startValue is not covered by the Mapper, then the value maps to itself. */
         return startValue;
     }
 

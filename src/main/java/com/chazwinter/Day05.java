@@ -39,6 +39,7 @@ public class Day05 {
                         Long.parseLong(valuesToMap[1]),
                         Long.parseLong(valuesToMap[2]));
                 allTypeMappings.get(currentMapType).add(mapper);
+            /* Oh yeah, we need the seeds too. */
             } else if (line.contains("seeds:")) {
                 String[] splitByColon = line.split(":");
                 String[] splitNumbers = splitByColon[1].split(" ");
@@ -76,6 +77,11 @@ public class Day05 {
         return minLocation;
     }
 
+    /**
+     * Read the input file, and figure out which enum corresponds to this line.
+     * @param line The line from the input file.
+     * @return The enum MapType for that line.
+     */
     private MapType getCurrentMapTypeFromLine(String line) {
         String[] splitLine = line.split(" ");
         String mapTypeAsString = splitLine[0]
@@ -84,6 +90,11 @@ public class Day05 {
         return MapType.valueOf(mapTypeAsString);
     }
 
+    /**
+     * Using all the various RangeMappers, figure out the rest of the Seed's attributes.
+     * @param seed The input seed that needs attributes.
+     * @return The location attribute, since that's what we're going to use to solve the problem.
+     */
     private long processSeed(Seed seed) {
         MapType currentMapType = MapType.SEED_TO_SOIL;
         seed.setSoil(RangeMapper.getMapping(seed.getSeedNumber(), allTypeMappings.get(currentMapType)));
