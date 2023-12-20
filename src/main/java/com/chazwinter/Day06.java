@@ -37,7 +37,8 @@ public class Day06 {
     }
 
     /**
-     * Method that solves Part 1. Find the total different ways to win by beating the record in each race.
+     * Find the total different ways to win by beating the record in each race.
+     * In part 1, this is a List of different races. In part 2, the List only contains one race.
      * @param timeValues The time limits of each race.
      * @param distanceValues The distance values to beat in each race.
      * @return The total ways you can win by beating the records in each race.
