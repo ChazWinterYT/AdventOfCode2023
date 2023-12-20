@@ -1,6 +1,7 @@
 package com.chazwinter;
 
 import com.chazwinter.model.ScratchCard;
+import com.chazwinter.util.AocUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,8 +17,6 @@ import java.util.stream.Collectors;
 
 /* NOTE: This class uses the model.ScratchCard class. */
 public class Day04 {
-    /* Compile a RegEx pattern for extracting numbers. */
-    public static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
     /* Retain a Map of Scratch Cards for Part 2. */
     Map<Integer, ScratchCard> scratchCards = new HashMap<>();
 
@@ -28,13 +27,13 @@ public class Day04 {
         while ((line = reader.readLine()) != null) {
             // Split by colon : to get the cardNumber.
             String[] splitByColon = line.split(":");
-            int cardNumber = extractNumberFromString(splitByColon[0]);
+            int cardNumber = AocUtils.extractNumberFromString(splitByColon[0]);
             ScratchCard card = new ScratchCard(cardNumber);
             // Split by pipe | to get the numbers on the card, and store them as a Set.
             String[] splitByPipe = splitByColon[1].split("\\|");
-            Set<Integer> winningNumbers = extractSetOfNumbersFromString(splitByPipe[0]);
+            Set<Integer> winningNumbers = AocUtils.extractNumbersFromString(splitByPipe[0], Collectors.toSet());
             card.setWinningNumbers(winningNumbers);
-            Set<Integer> yourNumbers = extractSetOfNumbersFromString(splitByPipe[1]);
+            Set<Integer> yourNumbers = AocUtils.extractNumbersFromString(splitByPipe[1], Collectors.toSet());
             card.setYourNumbers(yourNumbers);
             // Calculate the class fields for this card. Actually needed for both parts.
             this.generateCardData(card);
@@ -75,32 +74,6 @@ public class Day04 {
             int currentCopies = cardToCopy.getCopies();
             cardToCopy.setCopies(currentCopies + copiesToMake);
         }
-    }
-
-    /**
-     * Helper method for pulling the number out of a String.
-     * @param str The string to check (ex: "Card 123").
-     * @return The number that was found (ex: 123).
-     */
-    private int extractNumberFromString(String str) {
-        Matcher matcher = NUMBER_PATTERN.matcher(str);
-        if (matcher.find()) {
-            return Integer.parseInt(matcher.group());
-        }
-        throw new IllegalArgumentException("No number in that String.");
-    }
-
-    /**
-     * Helper method to extract a Set of numbers from a String. I used a Stream! Alyson would be proud.
-     * @param strToSplit The string containing the numbers we need.
-     * @return A Set containing those numbers.
-     */
-    private Set<Integer> extractSetOfNumbersFromString(String strToSplit) {
-        String[] splitNumbers = strToSplit.split(" ");
-        return Arrays.stream(splitNumbers)
-                .filter(str -> !str.isEmpty())
-                .map(Integer::parseInt)
-                .collect(Collectors.toSet());
     }
 
     /**
