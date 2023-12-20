@@ -6,13 +6,10 @@ import com.chazwinter.util.AocUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /* NOTE: This class uses the model.ScratchCard class. */
@@ -27,13 +24,13 @@ public class Day04 {
         while ((line = reader.readLine()) != null) {
             // Split by colon : to get the cardNumber.
             String[] splitByColon = line.split(":");
-            int cardNumber = AocUtils.extractNumberFromString(splitByColon[0]);
+            int cardNumber = AocUtils.extractIntFromString(splitByColon[0]);
             ScratchCard card = new ScratchCard(cardNumber);
             // Split by pipe | to get the numbers on the card, and store them as a Set.
             String[] splitByPipe = splitByColon[1].split("\\|");
-            Set<Integer> winningNumbers = AocUtils.extractNumbersFromString(splitByPipe[0], Collectors.toSet());
+            Set<Integer> winningNumbers = AocUtils.extractIntegersFromString(splitByPipe[0], Collectors.toSet());
             card.setWinningNumbers(winningNumbers);
-            Set<Integer> yourNumbers = AocUtils.extractNumbersFromString(splitByPipe[1], Collectors.toSet());
+            Set<Integer> yourNumbers = AocUtils.extractIntegersFromString(splitByPipe[1], Collectors.toSet());
             card.setYourNumbers(yourNumbers);
             // Calculate the class fields for this card. Actually needed for both parts.
             this.generateCardData(card);

@@ -2,12 +2,9 @@ package com.chazwinter.util;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 /* This class will contain some utilities for helping to solve Advent of Code problems.
 * Maybe I can be one of those fancy people who can solve a problem in under 6 hours haha. */
@@ -15,11 +12,11 @@ public class AocUtils {
     /**
      * Helper method to extract any Collection of numbers from a String. Must specify the Collection type.
      * I used a Stream! Alyson would be proud.
-     * If you are sure that there is only one number, you can use extractNumberFromString() instead.
+     * If you are sure that there is only one number, you can use extractIntFromString() instead.
      * @param s The string containing the numbers we need.
      * @return A Collection containing those numbers.
      */
-    public static <T extends Collection<Integer>> T extractNumbersFromString(
+    public static <T extends Collection<Integer>> T extractIntegersFromString(
             String s, Collector<Integer, ?, T> collector) {
         String[] splitNumbers = s.split("\\s+");
         return Arrays.stream(splitNumbers)
@@ -29,14 +26,27 @@ public class AocUtils {
     }
 
     /**
-     * Helper method for pulling a single number out of a String.
-     * If there may be multiple numbers, use extractNumbersFromString(), which returns a Collection.
+     * Same as above, but gets Longs instead of Integers.
+     */
+    public static <T extends Collection<Long>> T extractLongsFromString(
+            String s, Collector<Long, ?, T> collector) {
+        String[] splitNumbers = s.split("\\s+");
+        return Arrays.stream(splitNumbers)
+                .filter(str -> !str.isEmpty() && isNumeric(str))
+                .map(Long::parseLong)
+                .collect(collector);
+    }
+
+    /**
+     * Helper method for pulling a single Integer out of a String.
+     * If there may be multiple numbers, use extractIntegersFromString(), which returns a Collection.
+     * If the number is too large for an Integer, use extractLongFromString().
      * @param str The string to check (ex: "Card 123").
      * @return The number that was found (ex: 123).
      */
-    public static int extractNumberFromString(String str) {
-        /* Compile a RegEx pattern for extracting numbers. */
-        Matcher matcher = Pattern.compile("\\d+").matcher(str);
+    public static int extractIntFromString(String str) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(str);
         if (matcher.find()) {
             return Integer.parseInt(matcher.group());
         }
@@ -44,7 +54,19 @@ public class AocUtils {
     }
 
     /**
-     * Helper method to determine if a String consists of numbers.
+     * Same as above, except it gets a Long instead of an Integer.
+     */
+    public static long extractLongFromString(String str) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.find()) {
+            return Long.parseLong(matcher.group());
+        }
+        throw new IllegalArgumentException("No number in that String.");
+    }
+
+    /**
+     * Helper method to determine if a String consists of a number.
      * @param s The string that might be a number.
      * @return true if the String is a number.
      */
