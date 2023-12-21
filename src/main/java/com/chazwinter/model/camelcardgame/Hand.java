@@ -127,12 +127,20 @@ public class Hand {
         this.handRank = handRank;
     }
 
+    public int getWinnings() {
+        return winnings;
+    }
+
+    public void setWinnings(int winnings) {
+        this.winnings = winnings;
+    }
+
     @Override
     public String toString() {
         String cardString = cards.stream()
                 .map(Card::toString)
                 .collect(Collectors.joining(""));
-        return String.format("%s. %s. w: %d",
-                cardString, handType, wager);
+        return String.format("%s. %s. wager: %d. Rank: %d, Winnings: %d",
+                cardString, handType, wager, handRank, winnings);
     }
 }

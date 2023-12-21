@@ -3,6 +3,7 @@ package com.chazwinter;
 import com.chazwinter.model.camelcardgame.Card;
 import com.chazwinter.model.camelcardgame.Hand;
 import com.chazwinter.model.camelcardgame.HandTypes;
+import com.chazwinter.util.AocUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,28 +19,30 @@ public class Day07 {
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
         String line;
         while ((line = reader.readLine()) != null) {
-
+            String[] cardsAndWager = line.split(" ");
+            int wager = AocUtils.extractIntFromString(cardsAndWager[1]);
+            allHands.add(new Hand(cardsAndWager[0], wager));
         }
-        return -1;
+        allHands.sort(Hand.getComparator());
+        int rank = allHands.size();
+        int totalWinnings = 0;
+        for (Hand hand : allHands) {
+            hand.setHandRank(rank--);
+            hand.setWinnings(hand.getWager() * hand.getHandRank());
+            totalWinnings += hand.getWinnings();
+        }
+        // Debug. Check the List of Hands to ensure they were generated and ranked properly.
+        // testPrintHands(allHands);
+        return totalWinnings;
     }
 
     /**
-     * Just a test to make sure my card ranking algorithm actually works.
+     * Test method to print the hands, one per line, to ensure they were parsed correctly.
      */
-    public void camelCardTest() {
-        String testHandString1 = "AAAQQ";
-        String testHandString2 = "KK599";
-        String testHandString3 = "A333A";
-        List<Hand> testHands = new ArrayList<>();
-        Hand testHand1 = new Hand(testHandString1, 99);
-        Hand testHand2 = new Hand(testHandString2, 66);
-        Hand testHand3 = new Hand(testHandString3, 55);
-        testHands.add(testHand1);
-        testHands.add(testHand2);
-        testHands.add(testHand3);
-        testHands.sort(Hand.getComparator());
-        System.out.println(testHands.get(0));
-        System.out.println(testHands.get(1));
-        System.out.println(testHands.get(2));
+    private void testPrintHands(List<Hand> allHands) {
+        for (Hand hand : allHands) {
+            System.out.println(hand);
+        }
     }
+
 }
