@@ -39,8 +39,8 @@ public class Hand {
     }
 
     /**
-     * Comparator to be used to rank Hands via tie-breaker.
-     * @return 1 if the first hand is stronger, -1 if the second hand is stronger, 0 if they are equal.
+     * Comparator to be used to rank Hands via tie-breaker. Ranks are in descending order, so...
+     * @return -1 if the first hand is stronger, 1 if the second hand is stronger, 0 if they are equal.
      */
     public static Comparator<Hand> getComparator() {
         return new Comparator<Hand>() {
