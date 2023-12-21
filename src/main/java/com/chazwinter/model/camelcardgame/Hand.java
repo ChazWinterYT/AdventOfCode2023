@@ -12,13 +12,45 @@ public class Hand {
     private int wager;
     private Map<Integer, Integer> cardFrequencies;
     private HandTypes handType;
-    private int handRank;
+    private int handRank;   // Calculated once all Hands are generated.
+    private int winnings;   // Calculated once all Hands are ranked.
 
+    /**
+     * Constructor for when you want to go from a String directly to a Hand of Cards.
+     * @param cardsAsString The String representation of the cards in a Hand.
+     * @param wager The wager associated with that String of Cards.
+     */
+    public Hand(String cardsAsString, int wager) {
+        this(stringToCardList(cardsAsString), wager);
+    }
+
+    /**
+     * Constructor for when you already have the List of Cards.
+     * Calls additional methods to calculate other class fields.
+     * @param cards The List of Cards in this Hand.
+     * @param wager The wager associated with that List of Cards.
+     */
     public Hand(List<Card> cards, int wager) {
         this.cards = cards;
         this.wager = wager;
         calculateCardFrequencies();
         calculateHandType();
+    }
+
+    /**
+     * Used by the Constructor that takes a String, to convert it to a List<Cards> before passing
+     * it to the other Constructor.
+     * @param cardsAsString The String representation of the cards in a Hand.
+     * @return The List of Cards for this Hand.
+     */
+    private static List<Card> stringToCardList(String cardsAsString) {
+        // Build cards using the String, then make the List of Cards.
+        List<Card> cards = new ArrayList<>();
+        for (char c : cardsAsString.toCharArray()) {
+            Card card = new Card(c);
+            cards.add(card);
+        }
+        return cards;
     }
 
     private void calculateCardFrequencies() {
@@ -48,11 +80,11 @@ public class Hand {
             public int compare(Hand h1, Hand h2) {
                 // First rank by stronger HandType.
                 for (HandTypes handType : HandTypes.values()) {
-                    if (handType.matches(h1) && !handType.matches(h2)) {
+                    if (h1.handType.equals(handType) && !h2.handType.equals(handType)) {
                         return -1;
-                    } else if (!handType.matches(h1) && handType.matches(h2)) {
+                    } else if (!h1.handType.equals(handType) && h2.handType.equals(handType)) {
                         return 1;
-                    } else if (handType.matches(h1) && handType.matches(h2)) {
+                    } else if (h1.handType.equals(handType) && h2.handType.equals(handType)) {
                         break;
                     }
                 }
@@ -85,6 +117,14 @@ public class Hand {
 
     public HandTypes getHandType() {
         return handType;
+    }
+
+    public int getHandRank() {
+        return handRank;
+    }
+
+    public void setHandRank(int handRank) {
+        this.handRank = handRank;
     }
 
     @Override
