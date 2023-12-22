@@ -11,26 +11,24 @@ import java.util.List;
 
 public class Day07 {
     public int camelCards(String filePath, int part) throws IOException {
-        // camelCardTest();     // Debug. Test to ensure that the Hands are built and sorted properly.
-
         List<Hand> allHands = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
         String line;
         while ((line = reader.readLine()) != null) {
             String[] cardsAndWager = line.split(" ");
-            String originalHandAsString = cardsAndWager[0];
+            String handAsString = cardsAndWager[0];
             int wager = AocUtils.extractIntFromString(cardsAndWager[1]);
             int numJokers = 0;
             // Only Part 2 uses Jokers. Replace them with a new symbol, so they can be evaluated properly.
             if (part == 2) {
-                originalHandAsString = originalHandAsString.replace('J', '?');
-                numJokers = Hand.countJokers(originalHandAsString);
+                handAsString = handAsString.replace('J', '?');
+                numJokers = Hand.countJokers(handAsString);
             }
-            Hand hand = new Hand(originalHandAsString, wager, numJokers);
+            Hand hand = new Hand(handAsString, wager, numJokers);
             allHands.add(hand);
         }
 
-        allHands.sort(Hand.getComparator());
+        allHands.sort(Hand.HAND_COMPARATOR);
         int rank = allHands.size();
         int totalWinnings = 0;
         for (Hand hand : allHands) {

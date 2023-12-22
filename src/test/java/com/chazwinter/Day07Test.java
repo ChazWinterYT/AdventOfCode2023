@@ -33,7 +33,7 @@ public class Day07Test {
         testHands.add(testHand1);
         testHands.add(testHand2);
         testHands.add(testHand3);
-        testHands.sort(Hand.getComparator());
+        testHands.sort(Hand.HAND_COMPARATOR);
         // THEN
         assertEquals(testHand2, testHands.get(0), "1st ranked hand should be 76543.");
         assertEquals(testHand1, testHands.get(1), "2nd ranked hand should be 762AK.");
@@ -53,7 +53,7 @@ public class Day07Test {
         testHands.add(testHand1);
         testHands.add(testHand2);
         testHands.add(testHand3);
-        testHands.sort(Hand.getComparator());
+        testHands.sort(Hand.HAND_COMPARATOR);
         // THEN
         assertEquals(testHand3, testHands.get(0), "1st ranked hand should be AAAQQ.");
         assertEquals(testHand1, testHands.get(1), "2nd ranked hand should be A333A.");
@@ -73,7 +73,7 @@ public class Day07Test {
         testHands.add(testHand1);
         testHands.add(testHand2);
         testHands.add(testHand3);
-        testHands.sort(Hand.getComparator());
+        testHands.sort(Hand.HAND_COMPARATOR);
         // THEN
         assertEquals(HandTypes.ONE_PAIR, testHand1.getHandType(), "Test hands should be ONE_PAIR.");
         assertEquals(HandTypes.ONE_PAIR, testHand2.getHandType(), "Test hands should be ONE_PAIR.");

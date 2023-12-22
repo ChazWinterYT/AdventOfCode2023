@@ -3,17 +3,19 @@ package com.chazwinter.model.camelcardgame;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Hand {
-    private String originalHandAsString;
-    private List<Card> cards;
-    private int wager;
-    private int numJokers;  // Used in part 2.
+    private final List<Card> cards;
+    private final int wager;
+    private final int numJokers;  // Used in part 2.
 
     private Map<Integer, Integer> cardFrequencies;
+    private Set<Integer> cardFrequencySet;
     private HandTypes handType;
     private int handRank;   // Calculated once all Hands are generated.
     private int winnings;   // Calculated once all Hands are ranked.
@@ -24,7 +26,7 @@ public class Hand {
      * @param wager The wager associated with that String of Cards.
      */
     public Hand(String originalHandAsString, int wager, int numJokers) {
-        this(stringToCardList(originalHandAsString), originalHandAsString, wager, numJokers);
+        this(stringToCardList(originalHandAsString), wager, numJokers);
     }
 
     /**
@@ -33,9 +35,8 @@ public class Hand {
      * @param cards The List of Cards in this Hand.
      * @param wager The wager associated with that List of Cards.
      */
-    public Hand(List<Card> cards, String originalHandAsString, int wager, int numJokers) {
+    public Hand(List<Card> cards, int wager, int numJokers) {
         this.cards = cards;
-        this.originalHandAsString = originalHandAsString;
         this.wager = wager;
         this.numJokers = numJokers;
         calculateCardFrequencies();
@@ -52,7 +53,6 @@ public class Hand {
         // Build cards using the String, then make the List of Cards.
         List<Card> cards = new ArrayList<>();
         for (char c : cardsAsString.toCharArray()) {
-            if (c == '?') continue;    // Don't put Jokers in the Hand.
             Card card = new Card(c);
             cards.add(card);
         }
@@ -60,74 +60,66 @@ public class Hand {
     }
 
     /**
-     * For Part 2. Checks for Jokers, counts them, and removes them from the Hand's String representation.
+     * For Part 2. Counts the Jokers in the Hand's String representation.
      * @param cardsAsString The String representation of the Hand to be checked.
      * @return the number of Jokers in the Hand.
      */
     public static int countJokers(String cardsAsString) {
-        int numJokers = 0;
+        int jokers = 0;
         for (char c : cardsAsString.toCharArray()) {
             if (c == '?') {
-                numJokers++;
+                jokers++;
             }
         }
-        return numJokers;
+        return jokers;
     }
 
     private void calculateCardFrequencies() {
         this.cardFrequencies = new HashMap<>();
+        this.cardFrequencySet = new HashSet<>();
         for (Card card : cards) {
+            if (card.getRankAsChar() == '?') continue; // Don't count Jokers.
             cardFrequencies.merge(card.getRank(), 1, Integer::sum);
         }
+        cardFrequencySet.addAll(cardFrequencies.values());
     }
 
-    public HandTypes calculateHandType() {
+    public void calculateHandType() {
         for (HandTypes handType : HandTypes.values()) {
-            if (handType.matchesJoker(this)) {
+            if (handType.matches(this)) {
                 this.handType = handType;
-                return handType;
+                return;
             }
         }
-        return HandTypes.HIGH_CARD;
     }
 
     /**
-     * Comparator to be used to rank Hands via tie-breaker. Ranks are in descending order, so...
-     * @return -1 if the first hand is stronger, 1 if the second hand is stronger, 0 if they are equal.
+     * Comparator to be used to rank Hands via tie-breaker. Ranks are in descending order, so compare() method
+     * returns -1 if the first hand is stronger, 1 if the second hand is stronger, 0 if they are equal.
      */
-    public static Comparator<Hand> getComparator() {
-        return new Comparator<Hand>() {
-            @Override
-            public int compare(Hand h1, Hand h2) {
-                // First rank by stronger HandType. HandTypes are already ranked by strength within the enum.
-                for (HandTypes handType : HandTypes.values()) {
-                    if (h1.handType.equals(handType) && !h2.handType.equals(handType)) {
-                        return -1;
-                    } else if (!h1.handType.equals(handType) && h2.handType.equals(handType)) {
-                        return 1;
-                    } else if (h1.handType.equals(handType) && h2.handType.equals(handType)) {
-                        break;  // Go to tie-breaker.
-                    }
-                }
-                /* Tie-breaker. Used if the hands have the same HandType. Must use the original String,
-                *   because in Part 2, we removed the Jokers from the List of Cards in each Hand. */
-                char[] h1OriginalCards = h1.originalHandAsString.toCharArray();
-                char[] h2OriginalCards = h2.originalHandAsString.toCharArray();
-                for (int i = 0; i < h1OriginalCards.length; i++) {
-                    /* Turn the char into a Card, so it can be ranked correctly.
-                    *   Cards are ranked in the order that they appear, not by strongest-first. */
-                    Card card1 = new Card(h1OriginalCards[i]);
-                    Card card2 = new Card(h2OriginalCards[i]);
-                    if (card1.getRank() > card2.getRank()) {
-                        return -1;
-                    } else if (card1.getRank() < card2.getRank()) {
-                        return 1;
-                    }
-                }
-                return 0;
+    public static final Comparator<Hand> HAND_COMPARATOR = (h1, h2) -> {
+        // First rank by stronger HandType. HandTypes are already ranked by strength within the enum.
+        for (HandTypes handType : HandTypes.values()) {
+            if (h1.handType.equals(handType) && !h2.handType.equals(handType)) {
+                return -1;
+            } else if (!h1.handType.equals(handType) && h2.handType.equals(handType)) {
+                return 1;
+            } else if (h1.handType.equals(handType) && h2.handType.equals(handType)) {
+                break;  // Go to tie-breaker.
             }
-        };
-    }
+        }
+        /* Tie-breaker. Used if the hands have the same HandType. */
+        List<Card> h1Cards = h1.cards;
+        List<Card> h2Cards = h2.cards;
+        for (int i = 0; i < h1Cards.size(); i++) {
+            if (h1Cards.get(i).getRank() > h2Cards.get(i).getRank()) {
+                return -1;
+            } else if (h1Cards.get(i).getRank() < h2Cards.get(i).getRank()) {
+                return 1;
+            }
+        }
+        return 0;
+    };
 
     public List<Card> getCards() {
         return new ArrayList<>(cards);
@@ -139,6 +131,10 @@ public class Hand {
 
     public Map<Integer, Integer> getCardFrequencies() {
         return cardFrequencies;
+    }
+
+    public Set<Integer> getCardFrequencySet() {
+        return cardFrequencySet;
     }
 
     public HandTypes getHandType() {
@@ -165,16 +161,12 @@ public class Hand {
         return numJokers;
     }
 
-    public void setNumJokers(int numJokers) {
-        this.numJokers = numJokers;
-    }
-
     @Override
     public String toString() {
         String cardListAsString = cards.stream()
                 .map(Card::toString)
                 .collect(Collectors.joining(""));
-        return String.format("%s (%s). %s. Jokers: %d. Wager: %d. Rank: %d, Winnings: %d",
-                cardListAsString, originalHandAsString, handType, numJokers, wager, handRank, winnings);
+        return String.format("%s. %s. Jokers: %d. Wager: %d. Rank: %d, Winnings: %d",
+                cardListAsString, handType, numJokers, wager, handRank, winnings);
     }
 }
