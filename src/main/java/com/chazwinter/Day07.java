@@ -1,8 +1,6 @@
 package com.chazwinter;
 
-import com.chazwinter.model.camelcardgame.Card;
 import com.chazwinter.model.camelcardgame.Hand;
-import com.chazwinter.model.camelcardgame.HandTypes;
 import com.chazwinter.util.AocUtils;
 
 import java.io.BufferedReader;
@@ -20,14 +18,23 @@ public class Day07 {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] cardsAndWager = line.split(" ");
+            String originalHandAsString = cardsAndWager[0];
             int wager = AocUtils.extractIntFromString(cardsAndWager[1]);
-            allHands.add(new Hand(cardsAndWager[0], wager));
+            int numJokers = 0;
+            // Only Part 2 uses Jokers. Replace them with a new symbol, so they can be evaluated properly.
+            if (part == 2) {
+                originalHandAsString = originalHandAsString.replace('J', '?');
+                numJokers = Hand.countJokers(originalHandAsString);
+            }
+            Hand hand = new Hand(originalHandAsString, wager, numJokers);
+            allHands.add(hand);
         }
+
         allHands.sort(Hand.getComparator());
         int rank = allHands.size();
         int totalWinnings = 0;
         for (Hand hand : allHands) {
-            hand.setHandRank(rank--);
+            hand.setHandRank(rank--); // Decrement the rank for each card you see.
             hand.setWinnings(hand.getWager() * hand.getHandRank());
             totalWinnings += hand.getWinnings();
         }
@@ -37,7 +44,7 @@ public class Day07 {
     }
 
     /**
-     * Test method to print the hands, one per line, to ensure they were parsed correctly.
+     * Test method to print the hands, one per line, to ensure they were evaluated correctly.
      */
     private void testPrintHands(List<Hand> allHands) {
         for (Hand hand : allHands) {
