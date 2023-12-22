@@ -1,4 +1,4 @@
-package com.chazwinter.model;
+package com.chazwinter.model.desertnodenetwork;
 
 public class DesertNode {
     private String value;

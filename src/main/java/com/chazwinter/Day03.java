@@ -27,7 +27,7 @@ public class Day03 {
             for (int i = 0; i < line.length(); i++) {
                 engineGrid[lineNumber.get()][i] = line.charAt(i);
             }
-            lineNumber.getAndAdd(1);
+            lineNumber.getAndIncrement();
         });
 
         if (part == 1) {

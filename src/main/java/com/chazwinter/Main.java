@@ -4,16 +4,16 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        int day = 8;                // Which day do you want to run?
-        boolean fullInput = false;  // true = full puzzle input; false = test input only
+        int day = 8;               // Which day do you want to run?
+        boolean fullInput = true;  // true = full puzzle input; false = test input only
         String filePath = buildFilePathForToday(day, fullInput);
 
         /* Code for running each day. Specify day and input type above. */
         if (day == 8) {
             Day08 day08 = new Day08();
-            int part1Value = day08.hauntedWasteland(filePath, 1);
+            long part1Value = day08.hauntedWasteland(filePath, 1);
             System.out.println("Day " + day + ", Part 1: " + part1Value);
-            int part2Value = day08.hauntedWasteland(filePath, 2);
+            long part2Value = day08.hauntedWasteland(filePath, 2);
             System.out.println("Day " + day + ", Part 2: " + part2Value);
         }
 
@@ -37,8 +37,8 @@ public class Main {
             Day05 day05 = new Day05();
             long part1Value = day05.seedFertilizer(filePath, 1);
             System.out.println("Day " + day + ", Part 1: " + part1Value);
-            long part2Value = day05.seedFertilizer(filePath, 2);
-            System.out.println("Day " + day + ", Part 2: " + part2Value);
+            //long part2Value = day05.seedFertilizer(filePath, 2);
+            //System.out.println("Day " + day + ", Part 2: " + part2Value);
         }
 
         if (day == 4) {
