@@ -1,11 +1,11 @@
 package com.chazwinter;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import com.chazwinter.util.AocUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Day03 {
     public static final int PUZZLE_SIZE = 140;   // 10 for test input, 140 for full input
@@ -19,17 +19,16 @@ public class Day03 {
                             -1,      1,
                             -1,  0,  1};
 
-    public int machineParts(String filePath, int part) throws IOException {
+    public int machineParts(String filePath, int part) {
         // Store puzzle input as a 2D char array (DID YOU SET THE PUZZLE SIZE?).
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        String line;
-        int lineNumber = 0;
-        while ((line = reader.readLine()) != null) {
+        AtomicInteger lineNumber = new AtomicInteger(0);
+
+        AocUtils.processInputFile(filePath, (line) -> {
             for (int i = 0; i < line.length(); i++) {
-                engineGrid[lineNumber][i] = line.charAt(i);
+                engineGrid[lineNumber.get()][i] = line.charAt(i);
             }
-            lineNumber++;
-        }
+            lineNumber.getAndAdd(1);
+        });
 
         if (part == 1) {
             // If we see a digit, check if it has symbols around it.

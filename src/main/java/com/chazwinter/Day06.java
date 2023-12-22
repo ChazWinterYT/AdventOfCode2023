@@ -2,26 +2,21 @@ package com.chazwinter;
 
 import com.chazwinter.util.AocUtils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Day06 {
-    public long boatRace(String filePath, int part) throws IOException {
+    public long boatRace(String filePath, int part) {
         List<Long> timeValues = new ArrayList<>();
         List<Long> distanceValues = new ArrayList<>();
 
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        String line;
-        while ((line = reader.readLine()) != null) {
+        AocUtils.processInputFile(filePath, (line) -> {
             if (part == 1) {
                 if (line.startsWith("Time:")) {
-                    timeValues = AocUtils.extractLongsFromString(line, Collectors.toList());
+                    timeValues.addAll(AocUtils.extractLongsFromString(line, Collectors.toList()));
                 } else if (line.startsWith("Distance:")) {
-                    distanceValues = AocUtils.extractLongsFromString(line, Collectors.toList());
+                    distanceValues.addAll(AocUtils.extractLongsFromString(line, Collectors.toList()));
                 }
             } else { // Part 2: It's actually only one number. Whatever, just add the single number to the List.
                 if (line.startsWith("Time:")) {
@@ -30,7 +25,8 @@ public class Day06 {
                     distanceValues.add(AocUtils.extractLongFromString(line.replace(" ", "")));
                 }
             }
-        }
+        });
+
         /* Get the upper and lower bounds of valid times.
         * In part two, the lists only contain one value. */
         return getWaysToBeatTheRecord(timeValues, distanceValues);

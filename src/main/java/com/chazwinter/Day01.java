@@ -1,10 +1,9 @@
 package com.chazwinter;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import com.chazwinter.util.AocUtils;
+
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,19 +14,18 @@ public class Day01 {
             "seven", 7,          "eight", 8,          "nine", 9,
             "zero", 0
     );
-    public int sumNumbersFromStrings(String filePath, int part) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        int sum = 0;
-        String line;
-        while ((line = reader.readLine()) != null) {
+    public int sumNumbersFromStrings(String filePath, int part) {
+        AtomicInteger sum = new AtomicInteger(0);
+        AocUtils.processInputFile(filePath, (line) -> {
             if (part == 1) {
-                sum += processDigitsFromInput(line);
+                sum.addAndGet(processDigitsFromInput(line));
             }
             if (part == 2) {
-                sum += processTextNums(line);
+                sum.addAndGet(processTextNums(line));
             }
-        }
-        return sum;
+        });
+
+        return sum.get();
     }
 
     /**

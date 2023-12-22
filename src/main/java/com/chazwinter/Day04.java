@@ -3,13 +3,11 @@ package com.chazwinter;
 import com.chazwinter.model.ScratchCard;
 import com.chazwinter.util.AocUtils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /* NOTE: This class uses the model.ScratchCard class. */
@@ -17,11 +15,11 @@ public class Day04 {
     /* Retain a Map of Scratch Cards for Part 2. */
     Map<Integer, ScratchCard> scratchCards = new HashMap<>();
 
-    public int scratchCards(String filePath, int part) throws IOException {
-        int totalCardScore = 0, totalScratchCards = 0;
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        String line;
-        while ((line = reader.readLine()) != null) {
+    public int scratchCards(String filePath, int part) {
+        AtomicInteger totalCardScore = new AtomicInteger(0);
+        int totalScratchCards = 0;
+
+        AocUtils.processInputFile(filePath, (line) -> {
             // Split by colon : to get the cardNumber.
             String[] splitByColon = line.split(":");
             int cardNumber = AocUtils.extractIntFromString(splitByColon[0]);
@@ -37,10 +35,11 @@ public class Day04 {
             // We need to store all the Scratch Cards for Part 2.
             if (part == 2) scratchCards.put(card.getCardNumber(), card);
             // No need to store the Scratch Cards for Part 1, so just perform the calculation here.
-            if (part == 1) totalCardScore += card.getScore();
+            if (part == 1) totalCardScore.getAndAdd(card.getScore());
 
             // System.out.println(card);    // Debug. See if the ScratchCard was properly generated.
-        }
+        });
+
         /* We need the total number of Scratch Cards. By the time we encounter a card,
              we already know exactly how many copies it should have, so just add it to the total.
              Then make copies of the subsequent cards based on the current card's data. */
@@ -52,7 +51,7 @@ public class Day04 {
                 makeCopiesOfScratchCards(currentCard);
             }
         }
-        return part == 1 ? totalCardScore : totalScratchCards;
+        return part == 1 ? totalCardScore.get() : totalScratchCards;
     }
 
     /**

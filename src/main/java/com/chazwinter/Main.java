@@ -4,11 +4,19 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        int day = 7;                // Which day do you want to run?
-        boolean fullInput = true;  // true = full puzzle input; false = test input only
+        int day = 8;                // Which day do you want to run?
+        boolean fullInput = false;  // true = full puzzle input; false = test input only
         String filePath = buildFilePathForToday(day, fullInput);
 
         /* Code for running each day. Specify day and input type above. */
+        if (day == 8) {
+            Day08 day08 = new Day08();
+            int part1Value = day08.hauntedWasteland(filePath, 1);
+            System.out.println("Day " + day + ", Part 1: " + part1Value);
+            int part2Value = day08.hauntedWasteland(filePath, 2);
+            System.out.println("Day " + day + ", Part 2: " + part2Value);
+        }
+
         if (day == 7) {
             Day07 day07 = new Day07();
             int part1Value = day07.camelCards(filePath, 1);

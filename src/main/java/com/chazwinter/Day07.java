@@ -3,18 +3,14 @@ package com.chazwinter;
 import com.chazwinter.model.camelcardgame.Hand;
 import com.chazwinter.util.AocUtils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Day07 {
-    public int camelCards(String filePath, int part) throws IOException {
+    public int camelCards(String filePath, int part) {
         List<Hand> allHands = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        String line;
-        while ((line = reader.readLine()) != null) {
+
+        AocUtils.processInputFile(filePath, (line) -> {
             String[] cardsAndWager = line.split(" ");
             String handAsString = cardsAndWager[0];
             int wager = AocUtils.extractIntFromString(cardsAndWager[1]);
@@ -26,7 +22,7 @@ public class Day07 {
             }
             Hand hand = new Hand(handAsString, wager, numJokers);
             allHands.add(hand);
-        }
+        });
 
         allHands.sort(Hand.HAND_COMPARATOR);
         int rank = allHands.size();

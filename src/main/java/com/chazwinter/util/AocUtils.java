@@ -1,7 +1,11 @@
 package com.chazwinter.util;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
@@ -9,6 +13,23 @@ import java.util.stream.Collector;
 /* This class will contain some utilities for helping to solve Advent of Code problems.
 * Maybe I can be one of those fancy people who can solve a problem in under 6 hours haha. */
 public class AocUtils {
+    /**
+     * The MVP utility method! Accepts AoC input files line by line for further processing.
+     * @param filePath String path to the input file for the current AoC day.
+     * @param processLine Consumer to accept the line and perform actions on it for each AoC day.
+     */
+    public static void processInputFile(String filePath, Consumer<String> processLine) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                processLine.accept(line);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("File could not be read. " + e);
+        }
+    }
+
     /**
      * Helper method to extract any Collection of numbers from a String. Must specify the Collection type.
      * I used a Stream! Alyson would be proud.

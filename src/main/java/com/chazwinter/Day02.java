@@ -1,19 +1,17 @@
 package com.chazwinter;
 
 import com.chazwinter.model.ColorGame;
+import com.chazwinter.util.AocUtils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /* NOTE: This class uses the model.ColorGame class. */
 public class Day02 {
-    public int validGameTotal(String filePath, int part) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        String line;
-        int gameSum = 0, powerSum = 0;
+    public int validGameTotal(String filePath, int part) {
+        AtomicInteger gameSum = new AtomicInteger(0);
+        AtomicInteger powerSum = new AtomicInteger(0);
 
-        while ((line = reader.readLine()) != null) {
+        AocUtils.processInputFile(filePath, (line) -> {
             String[] splitByColon = line.split(":");
             // Your array is now [gameNumber, (all draws for that game)].
             int gameNumber = Integer.parseInt(
@@ -28,17 +26,19 @@ public class Day02 {
                 game.extractGameData(splitByComma);
             }
             /* You now have a single ColorGame, containing a gameNumber, and
-            * three Integer Lists: red blocks from each draw, blue blocks, and green blocks.
-            */
+             * three Integer Lists: red blocks from each draw, blue blocks, and green blocks.
+             */
             if (part == 1) {
                 if (game.validateGameIndividual()) {
-                    gameSum += game.getGameNumber();
+                    gameSum.addAndGet(game.getGameNumber());
                 }
             } else if (part == 2) {
-                powerSum += game.calculatePower();
+                powerSum.addAndGet(game.calculatePower());
             }
             //System.out.println(game);
-        }
-        return part == 1 ? gameSum : powerSum;
+        });
+
+
+        return part == 1 ? gameSum.get() : powerSum.get();
     }
 }
