@@ -74,6 +74,7 @@ public class Day05 {
             }
         } else if (part == 2) {
             // minLocation cap is arbitrary. In this case I know the answer is less than 3,000,000.
+            // The cap was used during testing to ensure I wouldn't accidentally cause an infinite loop.
             while (!isValidSeed(processSeedFromLocation(minLocation)) && minLocation < 3_000_000) {
                 minLocation++;
             }
@@ -142,6 +143,11 @@ public class Day05 {
         return seed.getSeedNumber();
     }
 
+    /**
+     * Part 2. Determine if the location we used to generate a Seed resulted in a valid Seed.
+     * @param seedNumber the number corresponding to a potential Seed.
+     * @return true if the Seed is valid (it's in the initial Set of Seeds), false otherwise.
+     */
     private boolean isValidSeed(long seedNumber) {
         for (Long x : validSeeds.keySet()) {
             if (seedNumber >= x && seedNumber < x + validSeeds.get(x)) {
