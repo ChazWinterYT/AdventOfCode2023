@@ -12,14 +12,21 @@ public class Seed {
     private long location;
     private long numSeedsInSequence;
 
-    public Seed(long seedNumber) {
-        this.seedNumber = seedNumber;
+    public Seed(long value, String attribute) {
+        if (attribute.equals("location")) {
+            this.location = value;
+        } else if (attribute.equals("seedNumber")) {
+            this.seedNumber = value;
+        }
     }
 
     public long getSeedNumber() {
         return seedNumber;
     }
-    // No setter required for seedNumber
+
+    public void setSeedNumber(long seedNumber) {
+        this.seedNumber = seedNumber;
+    }
 
     public long getSoil() {
         return soil;

@@ -2,11 +2,11 @@ package com.chazwinter.util;
 
 /* NOTE: This enum is needed for Day05. */
 public enum MapType {
-    SEED_TO_SOIL,
-    SOIL_TO_FERTILIZER,
-    FERTILIZER_TO_WATER,
-    WATER_TO_LIGHT,
-    LIGHT_TO_TEMPERATURE,
+    HUMIDITY_TO_LOCATION,
     TEMPERATURE_TO_HUMIDITY,
-    HUMIDITY_TO_LOCATION;
+    LIGHT_TO_TEMPERATURE,
+    WATER_TO_LIGHT,
+    FERTILIZER_TO_WATER,
+    SOIL_TO_FERTILIZER,
+    SEED_TO_SOIL;
 }

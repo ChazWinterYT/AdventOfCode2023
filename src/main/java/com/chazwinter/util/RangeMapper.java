@@ -17,7 +17,7 @@ public class RangeMapper {
     }
 
     /**
-     * Given an input value, figure out what output value it maps to.
+     * Part 1. Given an input value, figure out what output value it maps to.
      * @param startValue The input value.
      * @param mappings The List of RangeMapper mappings that could apply to this input value.
      * @return The mapped output value.
@@ -32,6 +32,24 @@ public class RangeMapper {
         }
         /* If the startValue is not covered by the Mapper, then the value maps to itself. */
         return startValue;
+    }
+
+    /**
+     * Part 2. Given an output value, figure out what input value mapped to it.
+     * @param endValue The output value.
+     * @param mappings The List of RangeMapper mappings that could apply to this output value.
+     * @return The mapped input value.
+     */
+    public static long getMappingReversed(long endValue, List<RangeMapper> mappings) {
+        for (RangeMapper mapper : mappings) {
+            /* If the start value falls within the range of one of the mappers, use it! */
+            if (endValue >= mapper.destStart && endValue < mapper.destStart + mapper.range) {
+                long offset = mapper.destStart - mapper.sourceStart;
+                return endValue - offset;
+            }
+        }
+        /* If the endValue is not covered by the Mapper, then the value maps to itself. */
+        return endValue;
     }
 
     @Override
