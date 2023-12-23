@@ -68,9 +68,8 @@ public class Day05 {
 
         if (part == 1) {
             for (long seedNumber : validSeeds.keySet()) {
-                long seedLocation;
                 Seed seed = new Seed(seedNumber, "seedNumber");
-                seedLocation = processSeed(seed);
+                long seedLocation = processSeed(seed);
                 minLocation = Math.min(minLocation, seedLocation);
             }
         } else if (part == 2) {
