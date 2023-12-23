@@ -65,7 +65,10 @@ public class Day05 {
         } else {    // Part 2.
             minLocation = 0;
         }
-
+        /* For Part 1, it is faster to iterate through the established Set of Seeds to find the lowest location.
+         * For Part 2, it is actually faster to iterate from location 0, and brute-force check every location until
+         * you generate a valid Seed from the Set. The first location that results in a valid Seed is
+         * inherently the lowest. */
         if (part == 1) {
             for (long seedNumber : validSeeds.keySet()) {
                 Seed seed = new Seed(seedNumber, "seedNumber");
