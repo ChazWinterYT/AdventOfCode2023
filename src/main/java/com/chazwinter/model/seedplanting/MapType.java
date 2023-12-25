@@ -1,4 +1,4 @@
-package com.chazwinter.util;
+package com.chazwinter.model.seedplanting;
 
 /* NOTE: This enum is needed for Day05. */
 public enum MapType {

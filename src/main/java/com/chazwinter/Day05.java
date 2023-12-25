@@ -1,9 +1,9 @@
 package com.chazwinter;
 
-import com.chazwinter.model.Seed;
+import com.chazwinter.model.seedplanting.Seed;
 import com.chazwinter.util.AocUtils;
-import com.chazwinter.util.MapType;
-import com.chazwinter.util.RangeMapper;
+import com.chazwinter.model.seedplanting.MapType;
+import com.chazwinter.model.seedplanting.RangeMapper;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /* NOTE: This class uses the model.Seed class. */
 /* NOTE: This class uses the util.RangeMapper class. */
@@ -24,24 +25,13 @@ public class Day05 {
         allTypeMappings = new HashMap<>();
         validSeeds = new HashMap<>();
 
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
-        String line;
-        MapType currentMapType = null;
-        while ((line = reader.readLine()) != null) {
+        AtomicReference<MapType> currentMapType = new AtomicReference<>();
+        AocUtils.processInputFile(filePath, (line) -> {
             // Find the word "map": Get the MapType and associate an ArrayList with it.
             if (line.contains("map:")) {
-                currentMapType = getCurrentMapTypeFromLine(line);
-                allTypeMappings.putIfAbsent(currentMapType, new ArrayList<>());
-            /* Find numbers: Create a RangeMapper with those numbers and put it in the Map for that MapType. */
-            } else if (currentMapType != null && !line.trim().isEmpty()) {
-                String[] valuesToMap = line.split(" ");
-                RangeMapper mapper = new RangeMapper(
-                        currentMapType,
-                        Long.parseLong(valuesToMap[0]),
-                        Long.parseLong(valuesToMap[1]),
-                        Long.parseLong(valuesToMap[2]));
-                allTypeMappings.get(currentMapType).add(mapper);
-            /* Oh yeah, we need the seeds too. */
+                currentMapType.set(getCurrentMapTypeFromLine(line));
+                allTypeMappings.putIfAbsent(currentMapType.get(), new ArrayList<>());
+                /* Oh yeah, we need the seeds too. */
             } else if (line.contains("seeds:")) {
                 String[] splitByColon = line.split(":");
                 String[] splitNumbers = splitByColon[1].split(" ");
@@ -57,8 +47,17 @@ public class Day05 {
                                 AocUtils.extractLongFromString(splitNumbers[++i]));
                     }
                 }
+                /* Find numbers: Create a RangeMapper with those numbers and put it in the Map for that MapType. */
+            } else if (!line.trim().isEmpty()) {
+                String[] valuesToMap = line.split(" ");
+                RangeMapper mapper = new RangeMapper(
+                        currentMapType.get(),
+                        Long.parseLong(valuesToMap[0]),
+                        Long.parseLong(valuesToMap[1]),
+                        Long.parseLong(valuesToMap[2]));
+                allTypeMappings.get(currentMapType.get()).add(mapper);
             }
-        }
+        });
         long minLocation;
         if (part == 1) {
             minLocation = Long.MAX_VALUE;

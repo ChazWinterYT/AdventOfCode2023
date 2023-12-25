@@ -1,4 +1,4 @@
-package com.chazwinter.model;
+package com.chazwinter.model.seedplanting;
 
 /* NOTE: This class is needed for Day05. */
 public class Seed {

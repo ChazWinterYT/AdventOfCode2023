@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        int day = 9;               // Which day do you want to run?
+        int day = 5;               // Which day do you want to run?
         boolean fullInput = true;  // true = full puzzle input; false = test input only
         String filePath = buildFilePathForToday(day, fullInput);
 

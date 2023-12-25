@@ -1,4 +1,4 @@
-package com.chazwinter.util;
+package com.chazwinter.model.seedplanting;
 
 import java.util.List;
 
