@@ -5,23 +5,18 @@ import com.chazwinter.util.AocUtils;
 import com.chazwinter.model.seedplanting.MapType;
 import com.chazwinter.model.seedplanting.RangeMapper;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-/* NOTE: This class uses the model.Seed class. */
-/* NOTE: This class uses the util.RangeMapper class. */
-/* NOTE: This class uses the util.MapType enum. */
+/* NOTE: This class uses classes in the model.seedplanting package. */
 public class Day05 {
     Map<MapType, List<RangeMapper>> allTypeMappings;
     Map<Long, Long> validSeeds;
 
-    public long seedFertilizer(String filePath, int part) throws IOException {
+    public long seedFertilizer(String filePath, int part) {
         allTypeMappings = new HashMap<>();
         validSeeds = new HashMap<>();
 
