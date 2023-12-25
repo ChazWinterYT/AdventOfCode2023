@@ -34,8 +34,8 @@ public class AocUtils {
      * Helper method to extract any Collection of numbers from a String. Must specify the Collection type.
      * I used a Stream! Alyson would be proud.
      * If you are sure that there is only one number, you can use extractIntFromString() instead.
-     * @param s The string containing the numbers we need.
-     * @return A Collection containing those numbers.
+     * @param s The string containing the numbers we need (ex: "A 1 B 2 C 3").
+     * @return A Collection containing those numbers (ex: [1, 2, 3]).
      */
     public static <T extends Collection<Integer>> T extractIntegersFromString(
             String s, Collector<Integer, ?, T> collector) {
