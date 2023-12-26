@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -109,5 +110,12 @@ public class AocUtils {
      */
     public static boolean isInBounds(int row, int col, int[][] arr) {
         return row >= 0 && col >= 0 && row < arr.length && col < arr[row].length;
+    }
+
+    /**
+     * Same as above, but for a List of Lists.
+     */
+    public static <T> boolean isInBounds(int row, int col, List<List<T>> list) {
+        return row >= 0 && col >= 0 && row < list.size() && col < list.get(row).size();
     }
 }
