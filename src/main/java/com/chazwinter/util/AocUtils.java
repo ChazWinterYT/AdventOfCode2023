@@ -113,7 +113,7 @@ public class AocUtils {
     }
 
     /**
-     * Same as above, but for a List of Lists.
+     * Same as above, but for a List of Lists (of any type).
      */
     public static <T> boolean isInBounds(int row, int col, List<List<T>> list) {
         return row >= 0 && col >= 0 && row < list.size() && col < list.get(row).size();
