@@ -2,6 +2,8 @@ package com.chazwinter.model.pipemaze;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class PipeNodeNetwork {
     private List<List<PipeNode>> network;
@@ -19,6 +21,10 @@ public class PipeNodeNetwork {
         return network.get(row).get(col);
     }
 
+    public List<List<PipeNode>> getNetworkAsList() {
+        return network;
+    }
+
     public PipeNode getRoot() {
         return root;
     }
@@ -27,15 +33,11 @@ public class PipeNodeNetwork {
         this.root = root;
     }
 
-    public List<List<PipeNode>> getNetworkAsList() {
-        return network;
-    }
-
     public void printNetwork() {
         for (int row = 0; row < network.size(); row++) {
             System.out.print("Row " + (row) + ": ");
             for (int col = 0; col < network.get(0).size(); col++) {
-                System.out.print(get(row, col).getNodeType());
+                System.out.print(get(row, col).getNodeType().getSymbol());
             }
             System.out.println();
         }

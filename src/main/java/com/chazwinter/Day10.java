@@ -3,6 +3,7 @@ package com.chazwinter;
 import com.chazwinter.model.pipemaze.NodeType;
 import com.chazwinter.model.pipemaze.PipeNode;
 import com.chazwinter.model.pipemaze.PipeNodeNetwork;
+import com.chazwinter.model.pipemaze.PipeNodeProcessor;
 import com.chazwinter.util.AocUtils;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Day10 {
             for (int colNumber = 0; colNumber < line.length(); colNumber++) {
                 PipeNode currentNode = new PipeNode(line.charAt(colNumber), rowNumber.get(), colNumber);
                 /* Track the starting node once we find it. */
-                if (currentNode.getNodeType() == 'S') {
+                if (currentNode.getNodeType() == NodeType.START) {
                     startingNodeLocation[0] = rowNumber.get();
                     startingNodeLocation[1] = colNumber;
                     currentNode.setLevel(0);
@@ -38,7 +39,9 @@ public class Day10 {
             network.addListOfNodesToNetwork(currentRowOfNodes);
             rowNumber.getAndIncrement();
         });
-        network.printNetwork();
+        // Debug: Make sure the network was generated properly.
+        // network.printNetwork();
+
         /* Starting Node does not have a shape, so we need to figure out what its neighbors are. */
         figureOutStartingNodeNeighbors(network);
 
@@ -49,12 +52,13 @@ public class Day10 {
 
         while (!queue.isEmpty()) {
             PipeNode currentNode = queue.poll();
-
+            PipeNodeProcessor.addNeighborsIfValid(currentNode, network);
             for (PipeNode neighbor : currentNode.getNeighbors()) {
                 if (!neighbor.isVisited()) {
                     neighbor.setVisited(true);
                     neighbor.setLevel(currentNode.getLevel() + 1);
                     maxStepsFromStart = Math.max(maxStepsFromStart, neighbor.getLevel());
+                    queue.add(neighbor);
                 }
             }
         }
@@ -77,9 +81,9 @@ public class Day10 {
         }
         // nodeUp needs a pipe facing South. That's Vertical, 7, or F.
         if (nodeUp != null
-                && (nodeUp.getNodeType() == NodeType.VERTICAL_PIPE.getSymbol()
-                || nodeUp.getNodeType() == NodeType.SEVEN_BEND.getSymbol()
-                || nodeUp.getNodeType() == NodeType.F_BEND.getSymbol())) {
+                && (nodeUp.getNodeType() == NodeType.VERTICAL_PIPE
+                || nodeUp.getNodeType() == NodeType.SEVEN_BEND
+                || nodeUp.getNodeType() == NodeType.F_BEND)) {
             startingNode.addNeighbor(nodeUp);
         }
 
@@ -89,9 +93,9 @@ public class Day10 {
         }
         // nodeDown needs a pipe facing North. That's Vertical, L, or J.
         if (nodeDown != null
-                && (nodeDown.getNodeType() == NodeType.VERTICAL_PIPE.getSymbol()
-                || nodeDown.getNodeType() == NodeType.L_BEND.getSymbol()
-                || nodeDown.getNodeType() == NodeType.J_BEND.getSymbol())) {
+                && (nodeDown.getNodeType() == NodeType.VERTICAL_PIPE
+                || nodeDown.getNodeType() == NodeType.L_BEND
+                || nodeDown.getNodeType() == NodeType.J_BEND)) {
             startingNode.addNeighbor(nodeDown);
         }
 
@@ -101,9 +105,9 @@ public class Day10 {
         }
         // nodeLeft needs a pipe facing East. That's Horizontal, L or F.
         if (nodeLeft != null
-                && (nodeLeft.getNodeType() == NodeType.HORIZONTAL_PIPE.getSymbol()
-                || nodeLeft.getNodeType() == NodeType.L_BEND.getSymbol()
-                || nodeLeft.getNodeType() == NodeType.F_BEND.getSymbol())) {
+                && (nodeLeft.getNodeType() == NodeType.HORIZONTAL_PIPE
+                || nodeLeft.getNodeType() == NodeType.L_BEND
+                || nodeLeft.getNodeType() == NodeType.F_BEND)) {
             startingNode.addNeighbor(nodeLeft);
         }
 
@@ -113,9 +117,9 @@ public class Day10 {
         }
         // nodeRight needs a pipe facing West. That's Horizontal, J, or 7.
         if (nodeRight != null
-                && (nodeRight.getNodeType() == NodeType.HORIZONTAL_PIPE.getSymbol()
-                || nodeRight.getNodeType() == NodeType.J_BEND.getSymbol()
-                || nodeRight.getNodeType() == NodeType.SEVEN_BEND.getSymbol())) {
+                && (nodeRight.getNodeType() == NodeType.HORIZONTAL_PIPE
+                || nodeRight.getNodeType() == NodeType.J_BEND
+                || nodeRight.getNodeType() == NodeType.SEVEN_BEND)) {
             startingNode.addNeighbor(nodeRight);
         }
     }

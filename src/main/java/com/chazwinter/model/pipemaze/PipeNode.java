@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PipeNode {
-    char nodeType;
+    NodeType nodeType;
     int row;
     int col;
     int level;
@@ -12,14 +12,14 @@ public class PipeNode {
     boolean visited;
 
     public PipeNode(char nodeType, int row, int col) {
-        this.nodeType = nodeType;
+        this.nodeType = NodeType.fromSymbol(nodeType);
         this.row = row;
         this.col = col;
         neighbors = new ArrayList<>();
         visited = false;
     }
 
-    public char getNodeType() {
+    public NodeType getNodeType() {
         return nodeType;
     }
 
@@ -39,8 +39,22 @@ public class PipeNode {
         this.level = level;
     }
 
+    /**
+     * Add a node as a neighbor for the current node.
+     * @param neighbor Node that should be linked as a neighbor.
+     */
     public void addNeighbor(PipeNode neighbor) {
         this.neighbors.add(neighbor);
+    }
+
+    /**
+     * Same as above, but accepts a List of neighbors instead of a single neighbor.
+     * @param neighbors The List of neighbors that should be linked to the current node.
+     */
+    public void addListOfNeighbors(List<PipeNode> neighbors) {
+        for (PipeNode neighbor : neighbors) {
+            addNeighbor(neighbor);
+        }
     }
 
     public List<PipeNode> getNeighbors() {
@@ -57,7 +71,7 @@ public class PipeNode {
 
     @Override
     public String toString() {
-        return String.format("nodeType: %c. row: %d col: %d.",
+        return String.format("nodeType: %s. row: %d col: %d.",
                 nodeType, row, col);
     }
 }
