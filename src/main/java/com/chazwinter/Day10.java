@@ -45,10 +45,12 @@ public class Day10 {
         /* Starting Node does not have a shape, so we need to figure out what its neighbors are. */
         figureOutStartingNodeNeighbors(network);
 
-        /* Perform BFS to find node farthest away from the start. */
+        /* Part 1: Perform BFS to find node farthest away from the start.
+        * You actually need to do this for Part 2 as well, but only to mark the pipes visited. */
         Queue<PipeNode> queue = new LinkedList<>();
         int maxStepsFromStart = 0;
         queue.add(network.getRoot());
+        network.getRoot().setVisited(true);
 
         while (!queue.isEmpty()) {
             PipeNode currentNode = queue.poll();
@@ -62,65 +64,84 @@ public class Day10 {
                 }
             }
         }
+        if (part == 1) return maxStepsFromStart;
 
-        return maxStepsFromStart;
+        int countInnerCells = 0;
+        for (int row = 0; row < network.getNetworkAsList().size(); row++) {
+            for (int col = 0; col < network.getNetworkAsList().get(0).size(); col++) {
+                if (pipesCrossedIsOdd(network, row, col)) {
+                    //System.out.printf("Node at row %d, col %d is inside the loop.\n", row, col);
+                    countInnerCells++;
+                }
+            }
+        }
+        return countInnerCells;
+    }
+
+    /**
+     * Determine if a cell within the network is inside the closed loop or outside of it.
+     * Method currently does not work.
+     * @param network The PipeNodeNetwork we want to check within.
+     * @param row The row of the checked cell.
+     * @param col The column of the checked cell.
+     * @return true if that cell is inside the loop, false otherwise.
+     */
+    private boolean pipesCrossedIsOdd(PipeNodeNetwork network, int row, int col) {
+        PipeNode currentCell = network.get(row, col);
+        int numCrossings = 0;
+        /* If the current cell is PART of the loop, then it's obviously not inside the loop. */
+        if (currentCell.isVisited()) return false;
+        /* From the current cell, go left. If you cross an odd number of boundaries, you're inside the loop.
+        * Horizontal pipes don't count when moving left/right. You're moving tangent to the loop, not crossing it. */
+        for (int colToCheck = col; colToCheck >= 0; colToCheck--) {
+            PipeNode cellToCheck = network.get(row, colToCheck);
+            if (!cellToCheck.isVisited()) continue;
+            if (cellToCheck.getNodeType() != NodeType.HORIZONTAL_PIPE) {
+                numCrossings++;
+            }
+        }
+        return numCrossings % 2 == 1;
     }
 
     /**
      * The starting node does not specify its type, so we don't know what its neighbors are. This method checks all
      * four directions to see which nodes are the starting node's neighbors, and sets the correct ones as neighbors.
-     * The nodes are checked by brute-force. There's probably a better way.
      * @param network The node network we're checking.
      */
     private void figureOutStartingNodeNeighbors(PipeNodeNetwork network) {
         PipeNode startingNode = network.getRoot();
+
         /* For the four directions around root, determine which two can point back to the start. */
         PipeNode nodeUp = null;
         if (AocUtils.isInBounds(startingNode.getRow() - 1, startingNode.getCol(), network.getNetworkAsList())) {
             nodeUp = network.get(startingNode.getRow() - 1, startingNode.getCol());
-        }
-        // nodeUp needs a pipe facing South. That's Vertical, 7, or F.
-        if (nodeUp != null
-                && (nodeUp.getNodeType() == NodeType.VERTICAL_PIPE
-                || nodeUp.getNodeType() == NodeType.SEVEN_BEND
-                || nodeUp.getNodeType() == NodeType.F_BEND)) {
-            startingNode.addNeighbor(nodeUp);
+            if (PipeNodeProcessor.validNorthNode(nodeUp)) {
+                startingNode.addNeighbor(nodeUp);
+            }
         }
 
         PipeNode nodeDown = null;
         if (AocUtils.isInBounds(startingNode.getRow() + 1, startingNode.getCol(), network.getNetworkAsList())) {
             nodeDown = network.get(startingNode.getRow() + 1, startingNode.getCol());
-        }
-        // nodeDown needs a pipe facing North. That's Vertical, L, or J.
-        if (nodeDown != null
-                && (nodeDown.getNodeType() == NodeType.VERTICAL_PIPE
-                || nodeDown.getNodeType() == NodeType.L_BEND
-                || nodeDown.getNodeType() == NodeType.J_BEND)) {
-            startingNode.addNeighbor(nodeDown);
+            if (PipeNodeProcessor.validSouthNode(nodeDown)) {
+                startingNode.addNeighbor(nodeDown);
+            }
         }
 
         PipeNode nodeLeft = null;
         if (AocUtils.isInBounds(startingNode.getRow(), startingNode.getCol() - 1, network.getNetworkAsList())) {
             nodeLeft = network.get(startingNode.getRow(), startingNode.getCol() - 1);
-        }
-        // nodeLeft needs a pipe facing East. That's Horizontal, L or F.
-        if (nodeLeft != null
-                && (nodeLeft.getNodeType() == NodeType.HORIZONTAL_PIPE
-                || nodeLeft.getNodeType() == NodeType.L_BEND
-                || nodeLeft.getNodeType() == NodeType.F_BEND)) {
-            startingNode.addNeighbor(nodeLeft);
+            if (PipeNodeProcessor.validWestNode(nodeLeft)) {
+                startingNode.addNeighbor(nodeLeft);
+            }
         }
 
         PipeNode nodeRight = null;
         if (AocUtils.isInBounds(startingNode.getRow(), startingNode.getCol() + 1, network.getNetworkAsList())) {
             nodeRight = network.get(startingNode.getRow(), startingNode.getCol() + 1);
-        }
-        // nodeRight needs a pipe facing West. That's Horizontal, J, or 7.
-        if (nodeRight != null
-                && (nodeRight.getNodeType() == NodeType.HORIZONTAL_PIPE
-                || nodeRight.getNodeType() == NodeType.J_BEND
-                || nodeRight.getNodeType() == NodeType.SEVEN_BEND)) {
-            startingNode.addNeighbor(nodeRight);
+            if (PipeNodeProcessor.validEastNode(nodeRight)) {
+                startingNode.addNeighbor(nodeRight);
+            }
         }
     }
 }

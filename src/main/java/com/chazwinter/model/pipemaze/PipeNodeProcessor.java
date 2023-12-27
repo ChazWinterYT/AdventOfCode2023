@@ -130,7 +130,7 @@ public class PipeNodeProcessor {
         }
     }
 
-    private static boolean validNorthNode(PipeNode northNode) {
+    public static boolean validNorthNode(PipeNode northNode) {
         // Valid connections from the North: |, 7, F.
         return northNode.getNodeType() == NodeType.VERTICAL_PIPE
                 || northNode.getNodeType() == NodeType.SEVEN_BEND
@@ -138,21 +138,21 @@ public class PipeNodeProcessor {
 
     }
 
-    private static boolean validSouthNode(PipeNode southNode) {
+    public static boolean validSouthNode(PipeNode southNode) {
         // Valid connections from the South: |, J, L.
         return southNode.getNodeType() == NodeType.VERTICAL_PIPE
                 || southNode.getNodeType() == NodeType.J_BEND
                 || southNode.getNodeType() == NodeType.L_BEND;
     }
 
-    private static boolean validWestNode(PipeNode westNode) {
+    public static boolean validWestNode(PipeNode westNode) {
         // Valid connections from the West: -, L, F.
         return westNode.getNodeType() == NodeType.HORIZONTAL_PIPE
                 || westNode.getNodeType() == NodeType.L_BEND
                 || westNode.getNodeType() == NodeType.F_BEND;
     }
 
-    private static boolean validEastNode(PipeNode eastNode) {
+    public static boolean validEastNode(PipeNode eastNode) {
         // Valid connections from the East: -, 7, J
         return eastNode.getNodeType() == NodeType.HORIZONTAL_PIPE
                 || eastNode.getNodeType() == NodeType.SEVEN_BEND
